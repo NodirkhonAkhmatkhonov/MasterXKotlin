@@ -1,24 +1,26 @@
 package com.example.masterxkotlin
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.databinding.ViewDataBinding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import com.example.masterxkotlin.base.BaseActivity
+import com.example.masterxkotlin.databinding.ActivityMainBinding
 import com.example.masterxkotlin.viewmodels.MyViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import soup.neumorphism.NeumorphButton
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener,
+    BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var textView: Button
+    private lateinit var textView: NeumorphButton
     private lateinit var mViewModel: MyViewModel
 
     private lateinit var right_to_middle: Animation
@@ -29,11 +31,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, BottomNavigation
     private lateinit var toolbar: Toolbar
     private lateinit var drawer: DrawerLayout
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private fun initObservers() {
+        mViewModel.words.observe(this, Observer {
+            textView.text = "sadf"
+        })
+    }
 
-        textView = findViewById(R.id.textView)
+    override fun initView(mViewDataBinding: ViewDataBinding?) {
+        textView = findViewById(R.id.text_view)
         textView.setOnClickListener(this)
 
         initNavigationDrawer()
@@ -41,6 +46,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, BottomNavigation
         initViewModel()
 
         initAnimation()
+
+        initObservers()
     }
 
     private fun initNavigationDrawer() {
@@ -49,8 +56,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, BottomNavigation
 
         drawer = findViewById(R.id.drawer_layout)
 
-        val toggle = ActionBarDrawerToggle(this, drawer, toolbar,
-        R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(
+            this, drawer, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -69,16 +78,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, BottomNavigation
     }
 
     private fun initViewModel() {
-        mViewModel = ViewModelProviders.of(this).get(MyViewModel::class.java)
-
-        mViewModel.getText().observe(this, Observer {
-            textView.text = it
-        })
+        mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))
+            .get(MyViewModel::class.java)
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.textView -> {
+            R.id.text_view -> {
                 textView.startAnimation(middle_to_left)
 
                 textView.postDelayed({
@@ -98,4 +104,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, BottomNavigation
 
         return true
     }
+
+    override fun getLayoutId() = R.layout.activity_main
 }

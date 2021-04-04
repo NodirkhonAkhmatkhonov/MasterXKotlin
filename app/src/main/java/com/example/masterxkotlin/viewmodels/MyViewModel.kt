@@ -1,28 +1,36 @@
 package com.example.masterxkotlin.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
+import com.example.masterxkotlin.model.WordsDatabase
+import com.example.masterxkotlin.model.WordsEntity
 import com.example.masterxkotlin.repositories.MyRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MyViewModel: ViewModel() {
+class MyViewModel(application: Application): AndroidViewModel(application) {
 
-    private var text = MutableLiveData<String>()
     private var repository: MyRepository? = null
+    private val db: WordsDatabase
+//    private val context = getApplication<Application>().applicationContext
+    var words = MutableLiveData<List<WordsEntity>>()
 
-    fun init() {
+    init {
         repository = MyRepository.instance
-        text = repository!!.getData()
-    }
+        db = Room.databaseBuilder(
+            application,
+            WordsDatabase::class.java, "words.db"
+        ).build()
 
-    fun getText(): MutableLiveData<String> {
-        if (repository == null) {
-            init()
+        GlobalScope.launch {
+            words.postValue(repository!!.getAllWords(db))
         }
 
-        return text
-    }
-
-    fun getPlainText(): String {
-        return "sadfas"
     }
 }

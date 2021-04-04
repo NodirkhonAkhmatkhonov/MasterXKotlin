@@ -1,16 +1,20 @@
 package com.example.masterxkotlin.repositories
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import com.example.masterxkotlin.model.WordsDatabase
+import com.example.masterxkotlin.model.WordsEntity
+import com.example.masterxkotlin.model.WordsItem
 
 class MyRepository {
 
-    private var text: String = "Yeah"
+    suspend fun getAllWords(db: WordsDatabase) : List<WordsEntity>{
 
-    fun getData(): MutableLiveData<String> {
-        val data: MutableLiveData<String> = MutableLiveData()
-        data.value = text
-        return data
+        return db.wordsDao().getAllWords()
     }
+
+//    fun insertWord(db: WordsDatabase, item: WordsItem) {
+//        db.wordsDao().insertWord(item)
+//    }
 
     private object HOLDER {
         val INSTANCE = MyRepository()
