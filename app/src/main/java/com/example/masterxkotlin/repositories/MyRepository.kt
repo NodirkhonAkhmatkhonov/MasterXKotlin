@@ -7,10 +7,10 @@ import com.example.masterxkotlin.model.WordsItem
 
 class MyRepository {
 
-    suspend fun getAllWords(db: WordsDatabase) : List<WordsEntity>{
+//    suspend fun getAllWords(db: WordsDatabase) : List<WordsEntity>{
 
-        return db.wordsDao().getAllWords()
-    }
+//        return db.wordsDao().getAllWords()
+//    }
 
 //    fun insertWord(db: WordsDatabase, item: WordsItem) {
 //        db.wordsDao().insertWord(item)

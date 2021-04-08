@@ -1,11 +1,13 @@
 package com.example.masterxkotlin.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
+import com.example.masterxkotlin.base.BaseViewModel
 import com.example.masterxkotlin.model.WordsDatabase
 import com.example.masterxkotlin.model.WordsEntity
 import com.example.masterxkotlin.repositories.MyRepository
@@ -14,11 +16,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MyViewModel(application: Application): AndroidViewModel(application) {
+class SharedViewModel(application: Application): AndroidViewModel(application) {
 
     private var repository: MyRepository? = null
     private val db: WordsDatabase
-//    private val context = getApplication<Application>().applicationContext
     var words = MutableLiveData<List<WordsEntity>>()
 
     init {
@@ -29,8 +30,12 @@ class MyViewModel(application: Application): AndroidViewModel(application) {
         ).build()
 
         GlobalScope.launch {
-            words.postValue(repository!!.getAllWords(db))
+//            words.postValue(repository!!.getAllWords(db))
         }
+
+    }
+
+    fun onHFPlaygroundPressed() {
 
     }
 }

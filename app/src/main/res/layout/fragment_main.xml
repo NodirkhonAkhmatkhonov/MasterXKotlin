@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="mainFragmentModel"
+            type="com.example.masterxkotlin.ui.main.MainFragmentViewModel"
+            />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <soup.neumorphism.NeumorphImageButton
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_margin="10dp"
+            android:padding="18dp"
+            android:src="@drawable/ic_arrow_back"
+            android:onClick="@{() -> mainFragmentModel.goBack()}"
+            />
+
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            />
+
+        <soup.neumorphism.NeumorphButton
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="40dp"
+            android:onClick="@{() -> mainFragmentModel.onCardPressed()}"
+
+            />
+    </LinearLayout>
+</layout>

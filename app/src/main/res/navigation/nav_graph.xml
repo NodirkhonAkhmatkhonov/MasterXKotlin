@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.masterxkotlin.ui.home.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popEnterAnim="@android:anim/fade_out"
+            app:enterAnim="@anim/slide_in_right"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_homeFragment_to_wordsFragment"
+            app:destination="@id/wordsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popEnterAnim="@android:anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.masterxkotlin.ui.main.MainFragment"
+        android:label="MainFragment"
+        />
+    <fragment
+        android:id="@+id/wordsFragment"
+        android:name="com.example.masterxkotlin.ui.words.WordsFragment"
+        android:label="WordsFragment" />
+
+</navigation>
