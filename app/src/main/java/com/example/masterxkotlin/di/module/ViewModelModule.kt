@@ -32,6 +32,4 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey( WordsFragmentViewModel::class )
     abstract fun bindWordsFragmentViewModel(wordsFragmentViewModel: WordsFragmentViewModel): ViewModel
-
-
 }

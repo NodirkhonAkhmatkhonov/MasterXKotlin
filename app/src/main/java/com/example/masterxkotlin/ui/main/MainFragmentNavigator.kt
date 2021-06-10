@@ -4,4 +4,5 @@ interface MainFragmentNavigator {
 
     fun goBack()
     fun onCardPressed()
+    fun onReversePressed()
 }

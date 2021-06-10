@@ -5,6 +5,7 @@ import com.example.masterxkotlin.di.module.RepoModule
 import com.example.masterxkotlin.di.module.ViewModelModule
 import com.example.masterxkotlin.di.module.WordsModule
 import com.example.masterxkotlin.ui.activity.MainActivity
+import com.example.masterxkotlin.ui.home.HomeFragment
 import com.example.masterxkotlin.ui.main.MainFragment
 import com.example.masterxkotlin.ui.words.WordsFragment
 import dagger.BindsInstance
@@ -25,4 +26,5 @@ interface MyComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(mainFragment: MainFragment)
     fun inject(wordsFragment: WordsFragment)
+    fun inject(homeFragment: HomeFragment)
 }

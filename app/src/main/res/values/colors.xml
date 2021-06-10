@@ -11,6 +11,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorShadow">#BCBFC6</color>
+    <color name="lightGrey">#DADADA</color>
 
     <color name="cardBack">#E5E5E5</color>
 </resources>

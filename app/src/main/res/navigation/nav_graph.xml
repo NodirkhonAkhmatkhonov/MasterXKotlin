@@ -12,14 +12,12 @@
         <action
             android:id="@+id/action_homeFragment_to_mainFragment"
             app:destination="@id/mainFragment"
-            app:popEnterAnim="@android:anim/fade_out"
-            app:enterAnim="@anim/slide_in_right"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="false"
+            />
         <action
             android:id="@+id/action_homeFragment_to_wordsFragment"
             app:destination="@id/wordsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@android:anim/fade_out" />
+            />
     </fragment>
 
     <fragment
