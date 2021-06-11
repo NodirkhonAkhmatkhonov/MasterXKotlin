@@ -1,32 +1,21 @@
 package com.example.masterxkotlin.ui.main
 
-import android.icu.number.Scale
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.transition.TransitionSet
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.AnimationUtils
-import android.view.animation.ScaleAnimation
+import android.view.animation.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.masterxkotlin.R
 import com.example.masterxkotlin.base.BaseApplication
 import com.example.masterxkotlin.base.BaseFragment
 import com.example.masterxkotlin.databinding.FragmentMainBinding
 import com.example.masterxkotlin.di.ViewModelFactory
-import com.example.masterxkotlin.model.WordsItem
-import com.example.masterxkotlin.ui.words.WordsFragmentViewModel
-import com.google.android.material.transition.ScaleProvider
-import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
 
@@ -38,6 +27,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
     lateinit var mViewModel: MainFragmentViewModel
     private var words = mutableListOf<WordsPair>()
     private var curIndex = -1
+    private var isReversed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,14 +57,21 @@ class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
         if (mViewDataBinding.cardSecond.visibility == View.VISIBLE) {
             mViewDataBinding.cardSecond.visibility = View.GONE
             mViewDataBinding.btnShow.text = "SHOW"
-            setWords()
+            scaleAnimate(mViewDataBinding.cardFirst, true)
+            Handler(Looper.getMainLooper()).postDelayed({
+                  setWords()
+            }, 150L)
         } else {
-            mViewDataBinding.cardSecond.visibility = View.VISIBLE
             mViewDataBinding.btnShow.text = "NEXT"
+            scaleAnimate(mViewDataBinding.cardSecond, false)
         }
     }
 
     override fun onReversePressed() {
+        rotateAnimate()
+
+        isReversed = !isReversed
+
         words.forEach {
             val secondPart = it.secondPart
             it.secondPart = it.firstPart
@@ -103,6 +100,67 @@ class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
 
         mViewDataBinding.tvFirst.text = words[random].firstPart
         mViewDataBinding.tvSecond.text = words[random].secondPart
+    }
+
+    private fun scaleAnimate(view: View, isFirstCard: Boolean) {
+        if (isFirstCard){
+            val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 0f)
+            val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 0f)
+            val alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f)
+
+            ObjectAnimator.ofPropertyValuesHolder(view, scaleX, scaleY, alpha).apply {
+                    interpolator = OvershootInterpolator()
+                    duration = 300L
+                    start()
+            }
+        }
+
+        val scaleX1 = PropertyValuesHolder.ofFloat(View.SCALE_X, 0f, 1f)
+        val scaleY1 = PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f, 1f)
+        val alpha1 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f)
+
+        ObjectAnimator.ofPropertyValuesHolder(view, scaleX1, scaleY1, alpha1).apply {
+            interpolator = OvershootInterpolator()
+            startDelay = 300L
+            start()
+        }
+
+        if (isFirstCard.not()) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                mViewDataBinding.cardSecond.visibility = View.VISIBLE
+            }, 300L)
+        }
+    }
+
+    private fun rotateAnimate() {
+        val rotate = PropertyValuesHolder.ofFloat(View.ROTATION, 0f, 360f)
+        ObjectAnimator.ofPropertyValuesHolder(mViewDataBinding.ivReverse, rotate).apply {
+            interpolator = LinearInterpolator()
+            duration = 500L
+            start()
+        }
+
+        var drawable = R.drawable.ic_reverse
+
+        if (isReversed.not())
+            drawable = R.drawable.ic_reverse_red
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            mViewDataBinding.ivReverse.setImageResource(drawable)
+        }, 500L)
+    }
+
+    private fun animat(view: View, isFirstCard: Boolean, scaleX: Float, scaleY: Float, mInterpolator: Interpolator) {
+        val scaleX1 = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleX, scaleY)
+        val scaleY1 = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleX, scaleY)
+        val alpha1 = PropertyValuesHolder.ofFloat(View.ALPHA, scaleX, scaleY)
+
+        ObjectAnimator.ofPropertyValuesHolder(view, scaleX1, scaleY1, alpha1).apply {
+            interpolator = mInterpolator
+            startDelay = 300L
+            start()
+        }
+
     }
 
     override fun goBack() {
