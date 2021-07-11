@@ -14,11 +14,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(){
 
     override fun initView(mViewDataBinding: ViewDataBinding?) {
         mViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
-
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-//        val navController = navHostFragment.navController
-
     }
 
     override fun getLayoutId() = R.layout.activity_main

@@ -3,6 +3,7 @@ package com.example.masterxkotlin.ui.words
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.masterxkotlin.R
 import com.example.masterxkotlin.base.BaseApplication
@@ -56,7 +57,7 @@ class WordsFragment : BaseFragment<FragmentWordsBinding>(), WordsFragmentNavigat
     }
 
     private fun initBroadcasts() {
-        GlobalScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             updateWordBroadcastChannel.asFlow().collect {
                 requireActivity().runOnUiThread {
                     recAdapter.dataUpdated(it)
@@ -65,7 +66,7 @@ class WordsFragment : BaseFragment<FragmentWordsBinding>(), WordsFragmentNavigat
             }
         }
 
-        GlobalScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             addWordBroadcastChannel.asFlow().collect {
                 requireActivity().runOnUiThread {
                     mViewModel.addNewWordToDB(it)

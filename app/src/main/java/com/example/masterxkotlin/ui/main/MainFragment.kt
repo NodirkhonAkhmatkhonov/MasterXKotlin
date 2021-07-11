@@ -16,6 +16,8 @@ import com.example.masterxkotlin.base.BaseFragment
 import com.example.masterxkotlin.databinding.FragmentMainBinding
 import com.example.masterxkotlin.di.ViewModelFactory
 import javax.inject.Inject
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
 
@@ -94,7 +96,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
 
         mViewDataBinding.cardSecond.visibility = View.GONE
 
-        val random = (0 until words.size).random()
+        val random = Random.nextInt(words.size)
 
         curIndex = random
 
@@ -104,31 +106,34 @@ class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
 
     private fun scaleAnimate(view: View, isFirstCard: Boolean) {
         if (isFirstCard){
+            // scale from 1 to 0
             val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 0f)
             val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 0f)
             val alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f)
 
             ObjectAnimator.ofPropertyValuesHolder(view, scaleX, scaleY, alpha).apply {
                     interpolator = OvershootInterpolator()
-                    duration = 300L
+                    duration = 200L
                     start()
             }
         }
 
+        // scale from 0 to 1
         val scaleX1 = PropertyValuesHolder.ofFloat(View.SCALE_X, 0f, 1f)
         val scaleY1 = PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f, 1f)
         val alpha1 = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f)
 
         ObjectAnimator.ofPropertyValuesHolder(view, scaleX1, scaleY1, alpha1).apply {
             interpolator = OvershootInterpolator()
-            startDelay = 300L
+            startDelay = 200L
             start()
         }
 
+        // second cardview becomes visible when animation starts
         if (isFirstCard.not()) {
             Handler(Looper.getMainLooper()).postDelayed({
                 mViewDataBinding.cardSecond.visibility = View.VISIBLE
-            }, 300L)
+            }, 200L)
         }
     }
 
@@ -150,7 +155,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>(), MainFragmentNavigator {
         }, 500L)
     }
 
-    private fun animat(view: View, isFirstCard: Boolean, scaleX: Float, scaleY: Float, mInterpolator: Interpolator) {
+    private fun scaleAnimate(view: View, isFirstCard: Boolean, scaleX: Float, scaleY: Float, mInterpolator: Interpolator) {
         val scaleX1 = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleX, scaleY)
         val scaleY1 = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleX, scaleY)
         val alpha1 = PropertyValuesHolder.ofFloat(View.ALPHA, scaleX, scaleY)
